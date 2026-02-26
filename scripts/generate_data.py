@@ -58,8 +58,7 @@ def generate_programmes(cfg: Config) -> pd.DataFrame:
     campus_assignments = np.random.choice(campuses, size=cfg.n_programmes, replace=True)
 
     # Difficulty factor drives retention differences later (lower = harder)
-    difficulty = np.round(np.random.uniform(0.60, 0.90, size=cfg.n_programmes), 2)
-
+    difficulty = np.round(np.random.uniform(0.75, 0.95, size=cfg.n_programmes), 2)
     # Simple name generator per faculty
     name_bank = {
         "Business": ["Business Studies", "Accounting", "Marketing", "Finance", "HR Management", "Entrepreneurship"],
@@ -289,7 +288,7 @@ def simulate_enrolments_and_performance(
         difficulty = float(prog.loc[programme_id, "difficulty_factor"])
         access = int(access_lookup.get(student_id, 0))
 
-        p = 0.82
+        p = 0.88
 
         # GPA adjustments
         if gpa < 2.0:
