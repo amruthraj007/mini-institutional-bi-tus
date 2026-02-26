@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# DuckDB
+*.duckdb
+*.wal
+
+# dbt
+dbt_packages/
+target/
+logs/
+
+# Tableau
+*.twb~
+*.hyper
+
+# OS files
+.DS_Store
+Thumbs.db
