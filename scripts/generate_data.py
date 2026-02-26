@@ -37,7 +37,77 @@ def ensure_output_dir(path: Path) -> None:
 # -----------------------------
 
 def generate_programmes(cfg: Config) -> pd.DataFrame:
-    raise NotImplementedError
+    faculties = ["Business", "Engineering", "Science", "Arts", "Health", "Computing"]
+    campuses = ["Athlone", "Moylish", "Thurles", "Clonmel", "Ennis"]
+    nfq_levels = [6, 7, 8]
+
+    # Mode distribution: 85% FT, 15% PT
+    modes = np.random.choice(
+        ["FT", "PT"],
+        size=cfg.n_programmes,
+        p=[0.85, 0.15],
+    )
+
+    # Spread programmes across faculties fairly evenly
+    faculty_assignments = np.random.choice(faculties, size=cfg.n_programmes, replace=True)
+
+    # NFQ levels with a realistic tilt (more level 8 programmes)
+    level_assignments = np.random.choice(nfq_levels, size=cfg.n_programmes, p=[0.20, 0.25, 0.55])
+
+    # Campuses distribution (roughly balanced)
+    campus_assignments = np.random.choice(campuses, size=cfg.n_programmes, replace=True)
+
+    # Difficulty factor drives retention differences later (lower = harder)
+    difficulty = np.round(np.random.uniform(0.60, 0.90, size=cfg.n_programmes), 2)
+
+    # Simple name generator per faculty
+    name_bank = {
+        "Business": ["Business Studies", "Accounting", "Marketing", "Finance", "HR Management", "Entrepreneurship"],
+        "Engineering": ["Mechanical Engineering", "Civil Engineering", "Electrical Engineering", "Mechatronics", "Energy Systems"],
+        "Science": ["Biotechnology", "Applied Science", "Pharmaceutical Science", "Environmental Science", "Sports Science"],
+        "Arts": ["Digital Media", "Design", "Creative Arts", "Journalism", "Languages", "Social Studies"],
+        "Health": ["Nursing", "Health Science", "Public Health", "Physiotherapy Studies", "Mental Health Studies"],
+        "Computing": ["Computer Science", "Software Development", "Data Analytics", "Cybersecurity", "Cloud Computing"],
+    }
+
+    programme_rows = []
+    for i in range(cfg.n_programmes):
+        faculty = faculty_assignments[i]
+        nfq = int(level_assignments[i])
+        mode = modes[i]
+        campus = campus_assignments[i]
+
+        # Construct a programme id like PRG001, PRG002...
+        programme_id = f"PRG{str(i+1).zfill(3)}"
+
+        # Select a name and add an NFQ hint
+        base_name = random.choice(name_bank[faculty])
+        # A light naming pattern; keep it believable
+        programme_name = f"Higher Cert in {base_name}" if nfq == 6 else \
+                         f"Ordinary Degree in {base_name}" if nfq == 7 else \
+                         f"Honours Degree in {base_name}"
+
+        programme_rows.append(
+            {
+                "programme_id": programme_id,
+                "programme_name": programme_name,
+                "faculty": faculty,
+                "nfq_level": nfq,
+                "mode": mode,
+                "campus": campus,
+                # simulation-only helper (we won't show it in dashboards)
+                "difficulty_factor": float(difficulty[i]),
+            }
+        )
+
+    programmes_df = pd.DataFrame(programme_rows)
+
+    # A touch of raw-ish imperfection (optional): inconsistent faculty casing (very low rate)
+    # Keep it tiny so it doesn't become annoying to clean
+    noisy_idx = programmes_df.sample(frac=0.02, random_state=cfg.seed).index
+    programmes_df.loc[noisy_idx, "faculty"] = programmes_df.loc[noisy_idx, "faculty"].str.lower()
+
+    return programmes_df
 
 
 def generate_students(cfg: Config, total_students: int) -> pd.DataFrame:
@@ -78,4 +148,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    cfg = Config()
+    set_seeds(cfg.seed)
+    df = generate_programmes(cfg)
+    print(df.head())
