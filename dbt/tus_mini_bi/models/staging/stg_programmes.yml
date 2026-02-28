@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_programmes
+    description: "Cleaned programme catalogue from raw.programmes"
+    columns:
+      - name: programme_id
+        tests:
+          - not_null
+          - unique
+      - name: faculty
+        tests:
+          - not_null
+      - name: nfq_level
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+               values: [6, 7, 8]
+      - name: mode
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+               values: ['FT', 'PT', 'Unknown']

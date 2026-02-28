@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_academic_performance
+    description: "Cleaned academic performance records from raw.academic_performance"
+    columns:
+      - name: student_id
+        tests: [not_null]
+      - name: academic_year
+        tests: [not_null]
