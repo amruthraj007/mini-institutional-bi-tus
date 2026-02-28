@@ -2,15 +2,14 @@ version: 2
 
 sources:
   - name: raw
-    description: "Raw synthetic source tables loaded into DuckDB from our CSV extracts"
+    description: "Raw synthetic source tables loaded into DuckDB from CSV extracts"
     schema: raw
     tables:
       - name: students
-        description: "Raw students data loaded from CSV"
+        description: "Raw student master data extract"
       - name: programmes
-        description: "Raw programmes vatalogue data loaded from CSV"
+        description: "Raw programme catalogue data extract"
       - name: enrolments
-        description: "Raw enrolments records data loaded from CSV"
+        description: "Raw enrolment records data extract"
       - name: academic_performance
-        description: "Raw academic performance data loaded from CSV"
-
+        description: "Raw academic performance extract"
