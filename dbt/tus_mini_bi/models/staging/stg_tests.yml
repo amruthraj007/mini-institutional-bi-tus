@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: stg_students
+    description: "Cleaned student master data, standardised from raw.students"
+    columns:
+      - name: student_id
+        tests:
+          - not_null
+          - unique
+      - name: gender
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Male', 'Female', 'Other/Unknown']
+      - name: access_flag
+        tests:
+          - not_null
+          - accepted_values:
+             arguments:
+               values: [0, 1]
