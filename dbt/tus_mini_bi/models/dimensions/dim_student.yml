@@ -1,0 +1,22 @@
+version 2:
+
+models:
+  - name: dim_student
+    description: "Student dimension table with derived age_band"
+    columns:
+      - name: student_id
+        tests: [not_null, unique]
+      - name: gender
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Male', 'Female', 'Other/Unknown']
+      - name: age_band
+        tests: [not_null]
+      - name: access_flag
+        tests:
+          - not_null
+          - accepted_values:
+             arguments:
+               values: [0, 1]          

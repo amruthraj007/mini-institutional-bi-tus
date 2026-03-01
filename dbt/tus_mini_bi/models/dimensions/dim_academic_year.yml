@@ -1,0 +1,13 @@
+version 2:
+
+models:
+  - name: dim_academic_year
+    description: "Academic year dimension derived from enrolment data"
+    columns:
+      - name: academic_year
+        tests:
+          - not_null
+          - unique
+      - name: year_index
+        tests:
+          - not_null
