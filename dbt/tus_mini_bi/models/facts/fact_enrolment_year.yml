@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: fact_enrolment_year
+    description: "Canonical enrolment fact (student-programme-academic_year) with derived bands and credits"
+    columns:
+      - name: student_id
+        tests: [not_null]
+      - name: programme_id
+        tests: [not_null]
+      - name: academic_year
+        tests: [not_null]
+      - name: year_of_study
+        tests: [not_null]
+      - name: entrant_flag
+        tests:
+          - accepted_values:
+              arguments:
+               values: [0, 1]
+      - name: gpa_band
+        tests: 
+          - accepted_values:
+              arguments:
+               values: ['Low', 'Medium', 'High', 'Unknown']
+      - name: attendance_band
+        tests: 
+          - accepted_values:
+              arguments:
+               values: ['Low', 'Medium', 'High', 'Unknown']
+    tests: 
+      - unique:
+          column_name: "student_id || '-' || programme_id || '-' || academic_year"

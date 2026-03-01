@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: fact_student_success_score
+    description: "Points-based student success risk model. Grain: student-programme-academic_year."
+    columns:
+      - name: student_id
+        tests: [not_null]
+      - name: programme_id
+        tests: [not_null]
+      - name: academic_year
+        tests: [not_null]
+      - name: risk_score
+        tests: [not_null]
+      - name: risk_band
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+               values: ['Low', 'Medium', 'High']
+    tests:
+      - unique:
+          column_name: "student_id || '-' || programme_id || '-' || academic_year"

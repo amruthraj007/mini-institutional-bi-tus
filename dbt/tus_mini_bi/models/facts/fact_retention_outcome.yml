@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: fact_retention_outcome
+    description: "Retention outcome fact computed via Year N -> Year N+1 look-ahead"
+    columns:
+      - name: student_id
+        tests: [not_null]
+      - name: programme_id
+        tests: [not_null]
+      - name: academic_year
+        tests: [not_null]
+    tests:
+      - unique:
+          column_name: "student_id || '-' || programme_id || '-' || academic_year"
